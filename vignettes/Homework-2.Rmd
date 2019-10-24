@@ -1,0 +1,95 @@
+---
+title: "Homework-2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Homework-2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+# Problem 1
+
+$$
+\left[\begin{array}{c}{\hat{\beta}_{0}} \\ {\hat{\beta}_{1}}\end{array}\right]=\left(\left[\begin{array}{cccc}{1} & {1} & {\cdots} & {1} \\ {x_{1}} & {x_{2}} & {\cdots} & {x_{n}}\end{array}\right]\left[\begin{array}{cc}{1} & {x_{1}} \\ {1} & {x_{2}} \\ {\vdots} & {\vdots} \\ {1} & {x_{n}}\end{array}\right]\right)^{-1}\left[\begin{array}{cccc}{1} & {1} & {\cdots} & {1} \\ {x_{1}} & {x_{2}} & {\cdots} & {x_{n}}\end{array}\right]\left[\begin{array}{c}{y_{1}} \\ {y_{2}} \\ {\vdots} \\ {y_{n}}\end{array}\right]= \left[\begin{array}{cc}{n} & {\sum x_{i}} \\ {\sum x_{i}} & {\sum x_{i}^{2}}\end{array}\right]^{-1}\left[\begin{array}{c}{\sum y_{i}} \\ {\sum x_{i} y_{i}}\end{array}\right]
+$$
+$$
+=\frac{1}{n \sum x_{i}^{2}\left(\sum x_{i}\right)^{2}}\left[\begin{array}{cc}{\sum x_{i}^{2}} & {-\sum x_{i}} \\ {-\sum x_{i}} & {n}\end{array}\right]\left[\begin{array}{c}{\sum y_{i}} \\ {\sum x_{i} y_{i}}\end{array}\right]=\frac{1}{n \sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}}\left[\begin{array}{c}{\sum x_{i}^{2} \sum y_{i}-\sum x_{i} \sum x_{i} y_{i}} \\ {n \sum x_{i} y_{i}-\sum x_{i} \sum y_{i}}\end{array}\right]=\left[\begin{array}{c}{\frac{\sum x_{i}^{2} \sum y_{i}-\sum x_{i} \sum x_{i} y_{i}}{n \sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}}} \\ {\frac{n \sum_{n} x_{i} y_{i}-\sum x_{i} \sum y_{i}}{n \sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}}}\end{array}\right]
+$$
+
+# Problem 4
+
+Reproduce 2.8 for OLS
+
+```{r}
+library(casl)
+set.seed(1)
+n <- 1000; p <- 25
+beta <- c(1, rep(0, p - 1))
+X <- matrix(rnorm(n * p), ncol = p)
+svals <- svd(X)$d
+max(svals) / min(svals)
+N <- 1e4; l2_errors <- rep(0, N)
+for (k in 1:N) {
+  y <- X %*% beta + rnorm(n)
+  betahat <- casl_ols_svd(X, y)
+  l2_errors[k] <- sqrt(sum((betahat - beta)^2))
+}
+mean(l2_errors)
+alpha <- 0.001
+X[,1] <- X[,1] * alpha + X[,2] * (1 - alpha)
+svals <- svd(X)$d
+max(svals) / min(svals)
+N <- 1e4; l2_errors <- rep(0, N)
+for (k in 1:N) {
+  y <- X %*% beta + rnorm(n)
+  betahat <- solve(crossprod(X), crossprod(X, y))
+  l2_errors[k] <- sqrt(sum((betahat - beta)^2))
+}
+mean(l2_errors)
+```
+
+Reproduce with ridge regression:
+
+```{r}
+library(bis557)
+set.seed(1)
+n <- 1000; p <- 25
+beta <- c(1, rep(0, p - 1))
+X <- matrix(rnorm(n * p), ncol = p)
+svals <- svd(X)$d
+max(svals) / min(svals)
+N <- 1e4; l2_errors <- rep(0, N)
+for (k in 1:N) {
+  y <- X %*% beta + rnorm(n)
+  dataset <- as.data.frame(cbind(y, X))
+  names(dataset) <- c("y", paste0("x", 1:p))
+  betahat <- ridge_regression(y ~ . -1, dataset, lambda = 0.5)
+  l2_errors[k] <- sqrt(sum((betahat - beta)^2))
+}
+mean(l2_errors)
+alpha <- 0.001
+X[,1] <- X[,1] * alpha + X[,2] * (1 - alpha)
+svals <- svd(X)$d
+max(svals) / min(svals)
+N <- 1e4; l2_errors <- rep(0, N)
+for (k in 1:N) {
+  y <- X %*% beta + rnorm(n)
+  dataset <- as.data.frame(cbind(y, X))
+  names(dataset) <- c("y", paste0("x", 1:p))
+  betahat <- ridge_regression(y ~ . -1, dataset, lambda = 0.5)
+  l2_errors[k] <- sqrt(sum((betahat - beta)^2))
+}
+mean(l2_errors)
+```
+
+As we can see, the error of ridge regression is significantly reduced. 
+
+# Problem 5
+
+To find the optimal $\hat{\beta}_j^{LASSO}$, we take the derivative of the cost function w.r.t $\beta_j$:
+
+$$
+\frac{\partial\left(\frac{1}{2 n}\|Y-X \beta\|_{2}^{2}+\lambda\|\beta\|_{1}\right)}{\partial \beta_{j}}=\frac{X^T_jY}{n} \pm \lambda=0
+$$
+
+If we have $\left|X_{j}^{T} Y\right| \leq n \lambda$, the derivative will be always greater than 0 i.e. any changes in $\beta_j$ will increase the cost function. The effect of the L1 penalty is relatively larger. Thus, the best solution is to keep $\hat{\beta}_j^{LASSO}=0$

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571840840010.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5B7D4CF2",
+    "lastKnownWriteTime" : 1571883539,
+    "last_content_update" : 1571883539557,
+    "path" : "~/Course/CC/BIS557/bis557/R/ridge_regression.R",
+    "project_path" : "R/ridge_regression.R",
+    "properties" : {
+        "cursorPosition" : "14,3",
+        "scrollLine" : "1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+Package: bis557
+Type: Package
+Title: Homework 2 of BIS557 Course
+Version: 0.0.1
+Authors@R: 
+    person(given = "Stella",
+           family = "Liu",
+           role = c("aut", "cre"),
+           email = "stella.liu@yale.edu")
+Description: This package includes a ridge regression function and the hyperparameter optimization function using cross-validation. The answers to other problems are included in the vignettes.
+License: LGPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Depends: R(>= 2.10)
+Imports: caret, MASS
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

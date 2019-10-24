@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571882568001.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "19B04323",
+    "lastKnownWriteTime" : 1571882581,
+    "last_content_update" : 1571882581601,
+    "path" : "~/Course/CC/BIS557/bis557/tests/testthat/test-ridge-regression.R",
+    "project_path" : "tests/testthat/test-ridge-regression.R",
+    "properties" : {
+        "cursorPosition" : "19,62",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
